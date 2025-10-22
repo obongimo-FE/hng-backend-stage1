@@ -33,8 +33,8 @@ It supports basic CRUD operations and an intelligent natural language parser pow
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/your-username/string-filter-api.git
-cd string-filter-api
+git clone https://github.com/obongimo-FE/hng-backend-stage1.git
+cd backend-stage1
 ```
 
 ### 2. Install Dependencies
