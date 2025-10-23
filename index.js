@@ -287,7 +287,7 @@ app.get('/strings/:value', (req, res) => {
 })
 
 // Add new string
-app.post('/string', (req, res) => {
+app.post('/strings', (req, res) => {
     try {
         const { value } = req.body;
         if (value === undefined) {
