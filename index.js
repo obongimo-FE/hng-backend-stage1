@@ -237,7 +237,7 @@ app.get('/strings', (req, res) => {
         filteredList = filteredList.filter(item => item.value.includes(contains_character));
     }
 
-    res.json({
+    res.status(200).json({
         data: filteredList,
         count: filteredList.length,
         filters_applied: req.query
@@ -280,7 +280,7 @@ app.get('/strings/:value', (req, res) => {
     const entry = stringList.find(item => item.value === value);
 
     if (entry) {
-        res.json(entry);
+        res.status(200).json(entry);
     } else {
         res.status(404).json({ error: 'String does not exist in the system' });
     }       
@@ -290,16 +290,18 @@ app.get('/strings/:value', (req, res) => {
 app.post('/string', (req, res) => {
     try {
         const { value } = req.body;
-        if (!value) {
-            return res.status(400).json({ error: 'Please provide a text field.' });
+        if (value === undefined) {
+            return res.status(422).json({ error: "Missing 'value' field." });
         }
 
+        // Invalid type
+        if (typeof value !== 'string') {
+            return res.status(422).json({ error: "'value' must be a string." });
+        }
+
+        // Duplicate
         if (stringList.find(item => item.value === value)) {
             return res.status(409).json({ error: 'String already exists.' });
-        }
-
-        if (value !== String(value)) {
-            return res.status(422).json({ error: 'Value must be a string.' });
         }
 
         const sha256_hash = crypto.createHash('sha256').update(value).digest('hex');
@@ -326,7 +328,10 @@ app.post('/string', (req, res) => {
 
         stringList.push(newEntry);
 
-        res.json(newEntry);
+        return res.status(201).json({
+            message: 'String created successfully.',
+            data: newEntry
+        });
         
     } catch (error) {
         console.error('Error processing /data request:', error.message);
