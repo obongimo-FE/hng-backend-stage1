@@ -328,10 +328,7 @@ app.post('/strings', (req, res) => {
 
         stringList.push(newEntry);
 
-        return res.status(201).json({
-            message: 'String created successfully.',
-            data: newEntry
-        });
+        return res.status(201).json(newEntry);
         
     } catch (error) {
         console.error('Error processing /data request:', error.message);
